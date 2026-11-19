@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 import tmdb from './api';
 import MovieCard from './MovieCard';
+import shape from './shape';
 
 
 function App() {
@@ -10,7 +11,8 @@ function App() {
     useEffect(() => {
         async function load() {
             const { results } = await tmdb('/movie/now_playing');
-            setMovies(results);
+            const { genres } = await tmdb('/genre/movie/list');
+            setMovies(results.map(m => shape(m, genres)));
         }
         load();
     }, []);
