@@ -30,12 +30,15 @@ function MyButton() {
 }
 
 export default function MyApp() {
+  const isLoggedId = true
+
   return (
     <div>
       <h1>HAEM의 React</h1>
       <MyButton />
       <p>방가방가 햄햄</p>
-      <Profile />
+      { isLoggedId ? <Profile /> : <p>로그인이 필요합니다.</p> }
+      { isLoggedId && <Profile /> }
     </div>
   );
 }
