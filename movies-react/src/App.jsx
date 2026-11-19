@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import haemkick from './assets/haemkick.jpeg';
 
 const user = {
@@ -48,8 +49,14 @@ function Profile() {
 }
 
 function MyButton() {
+  const [count, setCount] = useState(0);
+
+  function handleClick() {
+    setCount(count + 1);
+  }
+
   return (
-    <button>이것은 버튼입니당 . .</button>
+    <button onClick={ handleClick }>{ count }번 클릭했어용 . .</button>
   );
 }
 
