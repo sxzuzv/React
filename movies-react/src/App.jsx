@@ -14,6 +14,7 @@ const products = [
   { title: 'spicy', id: 4, isFavorite: false }
 ];
 
+
 function ShoppingList() {
   const shoppingItem = products.map(p => 
     <li key={ p.id }
@@ -48,26 +49,28 @@ function Profile() {
   );
 }
 
-function MyButton() {
-  const [count, setCount] = useState(0);
 
-  function handleClick() {
-    setCount(count + 1);
-  }
-
+function MyButtons({ cnt, onClickF }) {
   return (
-    <button onClick={ handleClick }>{ count }번 클릭했어용 . .</button>
-  );
+    <button onClick={ onClickF }>{ cnt }번 클릭했어용 . .</button>
+  )
 }
+
 
 export default function MyApp() {
   const isLoggedId = true
+  const [countAll, setCountAll] = useState(0)
+
+  function handleClick() {
+    setCountAll(countAll + 1);
+  }
 
   return (
     <div>
       <h1>HAEM의 React</h1>
 
-      <MyButton />
+      <MyButtons cnt={ countAll } onClickF={ handleClick } />
+      <MyButtons cnt={ countAll } onClickF={ handleClick } />
 
       { isLoggedId ? <Profile /> : <p>로그인이 필요합니다.</p> }
       { isLoggedId && <Profile /> }
