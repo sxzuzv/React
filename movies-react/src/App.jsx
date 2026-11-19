@@ -6,6 +6,27 @@ const user = {
   imageSize: 90,
 };
 
+const products = [
+  { title: 'rice', id: 1 },
+  { title: 'kuri', id: 2 },
+  { title: 'diesel', id: 3 },
+];
+
+function ShoppingList() {
+  const shoppingItem = products.map(p => 
+    <li key={ p.id }>
+      { p.title }
+    </li>
+  );
+
+  return (
+    <ul>
+      { shoppingItem }
+    </ul>
+  );
+}
+
+
 function Profile() {
   return (
     <>
@@ -35,10 +56,13 @@ export default function MyApp() {
   return (
     <div>
       <h1>HAEM의 React</h1>
+
       <MyButton />
-      <p>방가방가 햄햄</p>
+
       { isLoggedId ? <Profile /> : <p>로그인이 필요합니다.</p> }
       { isLoggedId && <Profile /> }
+      
+      <ShoppingList />
     </div>
   );
 }
