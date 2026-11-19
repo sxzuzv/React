@@ -7,14 +7,17 @@ const user = {
 };
 
 const products = [
-  { title: 'rice', id: 1 },
-  { title: 'kuri', id: 2 },
-  { title: 'diesel', id: 3 },
+  { title: 'rice', id: 1, isFavorite: true },
+  { title: 'kuri', id: 2, isFavorite: true },
+  { title: 'diesel', id: 3, isFavorite: true },
+  { title: 'spicy', id: 4, isFavorite: false }
 ];
 
 function ShoppingList() {
   const shoppingItem = products.map(p => 
-    <li key={ p.id }>
+    <li key={ p.id }
+        style={{ color: p.isFavorite ? 'blue' : 'red' }}
+    >
       { p.title }
     </li>
   );
