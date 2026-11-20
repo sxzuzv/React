@@ -9,11 +9,20 @@ function MovieList() {
     const [ movies, setMovies ] = useState([]);
     const [ query, setQuery ] = useState('');
 
+    const [ genreNames, setGenereNames ] = useState([]);
+    const [ selectedGenre, setSelectedGenre ] = useState('all');
+
     useEffect(() => {
         async function load() {
             const { results } = await tmdb('/movie/now_playing');
             const { genres } = await tmdb('/genre/movie/list');
             setMovies(results.map(m => shape(m, genres)));
+
+            const shownGenres = genres.filter(genre => {
+                const hasMovie = results.filter(movie => movie.genre_ids.includes(genre.id));
+                return hasMovie;
+            });
+            setGenereNames(shownGenres.map(g => g.name));
         }
         load();
     }, []);
@@ -25,6 +34,8 @@ function MovieList() {
             <div className="tools">
                 <label for="search">영화를 검색해보세용 : </label>
                 <input type="text" id="search" onChange={ e => setQuery(e.target.value) } />
+
+                <div>{ ['all', ...genreNames].map(name => <button>{ name }</button>) }</div>
             </div>
 
             <div id="card">
