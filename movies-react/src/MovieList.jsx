@@ -5,7 +5,7 @@ import MovieCard from './MovieCard';
 import shape from './shape';
 
 
-function App() {
+function MovieList() {
     const [ movies, setMovies ] = useState([]);
 
     useEffect(() => {
@@ -26,4 +26,4 @@ function App() {
     )
 }
 
-export default App;
+export default MovieList;
