@@ -12,6 +12,8 @@ function MovieList() {
     const [ genreNames, setGenereNames ] = useState([]);
     const [ selectedGenre, setSelectedGenre ] = useState('all');
 
+    const [ wishIds, setWishIds ] = useState([]);
+
     useEffect(() => {
         async function load() {
             const { results } = await tmdb('/movie/now_playing');
@@ -33,6 +35,18 @@ function MovieList() {
         shown = shown.filter(m => m.genre_ids.includes(selectedGenre));
     }
 
+    function toggleWish(id) {
+        let next;
+
+        if (wishIds.includes(id)) { 
+            next = wishIds.filter(wishId => wishId !== id);    // 해당 id만 뺀 새 배열
+        } else {
+            next = [...wishIds, id];                    // 기존 목록 + 새 id
+        }
+
+        setWishIds(next);   // 계산한 다음 상태로 교체
+    }
+
     return(
         <>
             <div className="tools">
@@ -52,7 +66,13 @@ function MovieList() {
             </div>
 
             <div id="card">
-                { shown.map((movie) => <MovieCard key={ movie.id } { ...movie } />)}
+                { shown.map((movie) => 
+                <MovieCard 
+                    key={ movie.id } { ...movie } 
+                    wish={ wishIds.includes(movie.id) } 
+                    onWish={ toggleWish }
+                />
+                )}
             </div>
         </>
     )
