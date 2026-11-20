@@ -22,7 +22,7 @@ function MovieList() {
 
             const shownGenres = genres.filter(genre => {
                 const hasMovie = results.filter(movie => movie.genre_ids.includes(genre.id));
-                return hasMovie;
+                return hasMovie.length > 0;
             });
             setGenereNames(shownGenres.map(g => g.name));
         }
