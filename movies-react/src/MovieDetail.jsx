@@ -5,7 +5,7 @@ import tmdb from './api.js';
 
 function MovieDetail() {
     const { id } = useParams();
-    const [ movie, setMovie ] = useState({});
+    const [ movie, setMovie ] = useState(null);
     const [ error, setError ] = useState('');
 
     useEffect(() => {
@@ -19,6 +19,7 @@ function MovieDetail() {
         load();
     }, [id]);
 
+    if (!movie) return <p>영화를 불러오는 중입니다.</p>
     if (error) return <p>영화를 불러오지 못했습니다.</p>
 
     return (
