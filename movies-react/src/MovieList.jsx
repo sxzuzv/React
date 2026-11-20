@@ -27,7 +27,11 @@ function MovieList() {
         load();
     }, []);
 
-    const shown = movies.filter(m => m.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
+    let shown = movies.filter(m => m.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
+
+    if (selectedGenre !== 'all') {
+        shown = shown.filter(m => m.genre_ids.includes(selectedGenre));
+    }
 
     return(
         <>
@@ -35,7 +39,15 @@ function MovieList() {
                 <label for="search">영화를 검색해보세용 : </label>
                 <input type="text" id="search" onChange={ e => setQuery(e.target.value) } />
 
-                <div>{ ['all', ...genreNames].map(name => <button>{ name }</button>) }</div>
+                <div>{ ['all', ...genreNames].map(name => 
+                    <button 
+                    key={ name }
+                    onClick={ () => { setSelectedGenre(name) }}
+                    >
+                        { name }
+                    </button>) 
+                    }
+                </div>
             </div>
 
             <div id="card">
