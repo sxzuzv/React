@@ -7,6 +7,7 @@ import shape from './shape';
 
 function MovieList() {
     const [ movies, setMovies ] = useState([]);
+    const [ query, setQuery ] = useState('');
 
     useEffect(() => {
         async function load() {
@@ -17,11 +18,18 @@ function MovieList() {
         load();
     }, []);
 
+    const shown = movies.filter(m => m.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
+
     return(
         <>
-        <div id="card">
-            { movies.map((movie) => <MovieCard key={ movie.id } { ...movie } />)}
-        </div>
+            <div className="tools">
+                <label for="search">영화를 검색해보세용 : </label>
+                <input type="text" id="search" onChange={ e => setQuery(e.target.value) } />
+            </div>
+
+            <div id="card">
+                { shown.map((movie) => <MovieCard key={ movie.id } { ...movie } />)}
+            </div>
         </>
     )
 }
