@@ -1,12 +1,15 @@
 import { useParams } from 'react-router';
 import { useState, useEffect } from 'react';
+
 import tmdb from './api.js';
+import { useWish } from './useWish';
 
 
 function MovieDetail() {
     const { id } = useParams();
     const [ movie, setMovie ] = useState(null);
     const [ error, setError ] = useState('');
+    const { wishIds, toggleWish } = useWish();
 
     useEffect(() => {
         async function load() {
@@ -23,12 +26,15 @@ function MovieDetail() {
     if (error) return <p>영화를 불러오지 못했습니다.</p>
 
     return (
-        <div className="detail">
-            <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} />
-            <h2>{ movie.title }번 영화 상세 페이지</h2>
-            <p>{ movie.tagline }번 영화 상세 페이지</p>
-            <p>{ movie.overview }번 영화 상세 페이지</p>
-        </div>
+        <>
+            <div className="detail">
+                <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} />
+                <h2>{ movie.title }번 영화 상세 페이지</h2>
+                <p>{ movie.tagline }번 영화 상세 페이지</p>
+                <p>{ movie.overview }번 영화 상세 페이지</p>
+            </div>
+            <button onClick={ () => { toggleWish(movie.id) }}>{ wishIds.includes(movie.id) ? '♥️' : '🤍' }wish</button>
+        </>
     )
 }
 

@@ -1,10 +1,14 @@
 import { Link } from 'react-router';
 
+import { useWish } from './useWish';
 
-function MovieCard({ id, title, poster_path, vote_average, release_date, genre_ids, wish, onWish }) {
+
+function MovieCard({ id, title, poster_path, vote_average, release_date, genre_ids }) {
+    const { wishIds, toggleWish } = useWish();
+
     function handleWish(e) {
         e.preventDefault();
-        onWish(id);
+        toggleWish(id);
     }
 
     return(
@@ -13,7 +17,7 @@ function MovieCard({ id, title, poster_path, vote_average, release_date, genre_i
             <h3>{ title }</h3>
             <p>평점 : { vote_average } / 개봉일: { release_date }</p>
             <p>장르: { genre_ids.join(' ') }</p>
-            <button onClick={ e => handleWish(e) }>{ wish ? '♥️' : '🤍' }wish</button>
+            <button onClick={ e => handleWish(e) }>{ wishIds.includes(id) ? '♥️' : '🤍' }wish</button>
         </Link>
     )
 }

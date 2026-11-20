@@ -4,12 +4,15 @@ import { BrowserRouter } from 'react-router'
 
 import './index.css'
 import App from './App.jsx'
+import { WishProvider } from './useWish.jsx'
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-    <App />
+      <WishProvider>
+        <App />
+      </WishProvider>
     </BrowserRouter>
   </StrictMode>
 )
