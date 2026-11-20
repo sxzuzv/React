@@ -43,6 +43,7 @@ function MovieList() {
                     <button 
                     key={ name }
                     onClick={ () => { setSelectedGenre(name) }}
+                    className={ name === selectedGenre ? 'on' : '' }
                     >
                         { name }
                     </button>) 
