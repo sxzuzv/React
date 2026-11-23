@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router';
 
 import Navbar from './components/NavBar.jsx';
 import PostList from './routes/PostList.jsx';
+import PostDetail from './routes/PostDetail.jsx'
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
           <main className="py-4">
             <Routes>
               <Route path="/" element={<PostList />} />
+              <Route path="/posts/:id" element={<PostDetail />} />
             </Routes>
           </main>
         </div>
