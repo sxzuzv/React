@@ -1,12 +1,22 @@
-import PostList from "./routes/PostList.jsx";
-import Navbar from "./components/NavBar.jsx";
+import { Routes, Route } from 'react-router';
+
+import Navbar from './components/Navbar.jsx';
+import PostList from './routes/PostList.jsx';
 
 
 function App() {
   return (
     <div className="container">
-      <Navbar />
-      <PostList />
+      <div className="row justify-content-center">
+        <div className="col-md-8 col-lg-6 col-xl-5">
+          <Navbar />
+          <main className="py-4">
+            <Routes>
+              <Route path="/" element={<PostList />} />
+            </Routes>
+          </main>
+        </div>
+      </div>
     </div>
   )
 }
