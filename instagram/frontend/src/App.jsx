@@ -1,6 +1,13 @@
+import PostList from "./routes/PostList.jsx";
+import Navbar from "./components/NavBar.jsx";
+
+
 function App() {
   return (
-    <h1>안녕 . .</h1>
+    <div className="container">
+      <Navbar />
+      <PostList />
+    </div>
   )
 }
 
