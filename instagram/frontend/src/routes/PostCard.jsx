@@ -1,6 +1,6 @@
-import { Link } from 'react-router'
+import { Link } from 'react-router';
 
-import { SERVER_URL } from "../api.js"
+import { SERVER_URL } from "../api.js";
 
 
 
