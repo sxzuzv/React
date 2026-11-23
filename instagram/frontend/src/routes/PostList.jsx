@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
-import { api, SERVER_URL } from '../api.js';
+import { api } from '../api.js';
+import PostCard from './PostCard.jsx';
 
 
 function PostList() {
@@ -20,13 +21,7 @@ function PostList() {
 
             <div>
                 { posts.map(post => (
-                    <article key={ post.id }>
-                        <h3>{ post.user.username }</h3>
-                        <p>{ post.content }</p>
-                        <p>좋아요 { post.likes.length }개</p>
-                        <p>작성일시 { new Date(post.created_at).toLocaleString('ko-KR') }</p>
-                        <img src={ `${ SERVER_URL }${ post.image_url }`} alt="" />
-                    </article>
+                    <PostCard key={ post.id } { ...post } />
                 ))}
             </div>
         </>
