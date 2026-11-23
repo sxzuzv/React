@@ -11,7 +11,7 @@ function MovieSearch() {
     const [ movies, setMovies ] = useState([]);
 
     async function handleSubmit(e) {
-        e.preventDefault(); // 현재 실행 중인 이벤트를 사용하지 않겠다! (발생된 이벤트를 무시한다.)
+        e.preventDefault();
 
         const { results } = await tmdb(`/search/movie?query=${query}`);
         const { genres } = await tmdb('/genre/movie/list');
