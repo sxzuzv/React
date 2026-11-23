@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router';
 
-import Navbar from './components/Navbar.jsx';
+import Navbar from './components/NavBar.jsx';
 import PostList from './routes/PostList.jsx';
 
 

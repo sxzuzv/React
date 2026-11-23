@@ -1,8 +1,18 @@
 from fastapi import FastAPI
-from routers import posts, auth, likes, comments, uploads
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
+
+from routers import auth, comments, likes, posts, uploads
+
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        'http://localhost:5173',
+    ]
+)
 
 app.include_router(posts.router)
 app.include_router(auth.router)
