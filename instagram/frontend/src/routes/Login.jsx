@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import { api } from '../api.js';
+import { useAuth } from '../hooks/useAuth.jsx';
 
 
 function Login() {
@@ -9,17 +9,13 @@ function Login() {
     const [ password, setPassword ] = useState('');
     const [ error, setError ] = useState('');
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     async function handleSubmit(e) {
         e.preventDefault();
 
         try {
-            const data = await api('/api/auth/login', {
-                method: 'POST',
-                body: new URLSearchParams({ username, password })
-            });
-
-            localStorage.setItem('access_token', data.access_token);
+            await login(username, password);
             navigate('/');
         } catch (e) {
             setError(e.message);
