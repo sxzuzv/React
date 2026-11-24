@@ -4,6 +4,7 @@ import Navbar from './components/NavBar.jsx';
 import PostList from './routes/PostList.jsx';
 import PostDetail from './routes/PostDetail.jsx';
 import Login from './routes/Login.jsx';
+import RequireLogin from './components/RequireLogin.jsx';
 
 
 function App() {
@@ -15,7 +16,9 @@ function App() {
           <main className="py-4">
             <Routes>
               <Route path="/" element={<PostList />} />
-              <Route path="/posts/:id" element={<PostDetail />} />
+              <Route element={<RequireLogin />}>
+                <Route path="/posts/:id" element={<PostDetail />} />
+              </Route>
               <Route path="/login" element={<Login />} />
             </Routes>
           </main>
