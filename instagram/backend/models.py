@@ -12,6 +12,9 @@ class User(Base):
   password_hash: Mapped[str]
   posts: Mapped[list['Post']] = relationship(back_populates='user')
 
+  provider: Mapped[str | None]
+  provider_id: Mapped[str | None]
+
 
 class Post(Base):
   __tablename__ = 'posts'

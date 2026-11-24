@@ -6,7 +6,7 @@ class Settings(BaseSettings):
   DB_URL: str
   SECRET_KEY: str
 
+  GOOGLE_CLIENT_ID: str = ''
+  GOOGLE_CLIENT_SECRET: str = ''
+
 settings = Settings()
-
-
-

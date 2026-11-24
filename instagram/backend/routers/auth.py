@@ -10,6 +10,21 @@ import uuid
 
 router = APIRouter(prefix='/api/auth', tags=['auth'])
 
+def set_refresh_cookie(response: Response, user, db: SessionDep):
+  # 서버에도 토큰 저장
+  jti = uuid.uuid4().hex # 임의의 고유값 생성
+  db.add(RefreshToken(id = jti, user_id = user.id))
+  db.commit()
+
+  response.set_cookie(
+    'refresh_token',
+    create_refresh_token(user.id, jti),
+    httponly=True,
+    samesite='lax',
+    max_age=60 * 60 * 24 * 14,
+    path='/api/auth'
+  )
+
 @router.post('/signup', response_model=UserOut, status_code=201)
 def signup(data: UserCreate, db: SessionDep):
   user = db.scalar(select(User).where(User.username == data.username))
@@ -38,18 +53,7 @@ def login(
     raise HTTPException(status_code=401, detail='아이디 또는 비밀번호가 틀렸습니다.')
 
   # 서버에도 토큰 저장
-  jti = uuid.uuid4().hex # 임의의 고유값 생성
-  db.add(RefreshToken(id = jti, user_id = user.id))
-  db.commit()
-
-  response.set_cookie(
-    'refresh_token',
-    create_refresh_token(user.id, jti),
-    httponly=True,
-    samesite='lax',
-    max_age=60 * 60 * 24 * 14,
-    path='/api/auth'
-  )
+  set_refresh_cookie(response, user, db)
 
   token = create_access_token(user.id)
 
