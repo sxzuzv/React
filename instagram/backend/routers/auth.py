@@ -1,11 +1,12 @@
 from fastapi import APIRouter, HTTPException, Depends, Response, Cookie
 from schemas import UserCreate, UserOut, Token
 from deps import SessionDep, password_hash, create_access_token, create_refresh_token, CurrentUserDep, SECRET_KEY, ALGORITHM
-from models import User
+from models import User, RefreshToken
 from sqlalchemy import select
 from fastapi.security import OAuth2PasswordRequestForm
 from typing import Annotated
 import jwt
+import uuid
 
 router = APIRouter(prefix='/api/auth', tags=['auth'])
 
@@ -36,9 +37,14 @@ def login(
   if user is None or not password_hash.verify(form.password, user.password_hash):
     raise HTTPException(status_code=401, detail='아이디 또는 비밀번호가 틀렸습니다.')
 
+  # 서버에도 토큰 저장
+  jti = uuid.uuid4().hex # 임의의 고유값 생성
+  db.add(RefreshToken(id = jti, user_id = user.id))
+  db.commit()
+
   response.set_cookie(
     'refresh_token',
-    create_refresh_token(user.id),
+    create_refresh_token(user.id, jti),
     httponly=True,
     samesite='lax',
     max_age=60 * 60 * 24 * 14,
@@ -76,10 +82,27 @@ def refresh(
   if user is None or payload.get('token_type') != 'refresh':
     raise HTTPException(status_code=401, detail='다시 로그인해주세요.')
 
+  # 데이터베이스에 저장된 토큰이 아닌 경우
+  if db.get(RefreshToken, payload.get('jti')) is None:
+    raise HTTPException(status_code=401, detail='토큰이 유효하지 않습니다.')
+
   # access_token 발행
   return { 'access_token': create_access_token(user.id), 'token_type': 'bearer' }
 
 
 @router.post('/logout')
-def logout(response: Response):
-  response.delete_cookie('refresh_token', path='/api/auths')
+def logout(response: Response, db: SessionDep, refresh_token: Annotated[str | None, Cookie()]):
+  # 데이터베이스의 토큰도 삭제
+  if refresh_token:
+    try:
+      payload = jwt.decode(refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
+      row = db.get(RefreshToken, payload.get('jti'))
+
+      if row:
+        db.delete(row)
+        db.commit()
+      
+    except jwt.InvalidTokenError:
+      pass
+
+  response.delete_cookie('refresh_token', path='/api/auth')

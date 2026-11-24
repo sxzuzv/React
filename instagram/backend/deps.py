@@ -33,9 +33,9 @@ def create_access_token(user_id: int):
   exp = datetime.now(timezone.utc) + timedelta(minutes=60)
   return jwt.encode({'sub': str(user_id), 'exp': exp}, SECRET_KEY, algorithm=ALGORITHM)
 
-def create_refresh_token(user_id: int):
+def create_refresh_token(user_id: int, jti: str):
   exp = datetime.now(timezone.utc) + timedelta(days=14)
-  return jwt.encode({'sub': str(user_id), 'exp': exp, 'type': 'refresh'}, SECRET_KEY, algorithm=ALGORITHM)
+  return jwt.encode({'sub': str(user_id), 'exp': exp, 'type': 'refresh', 'jti': jti}, SECRET_KEY, algorithm=ALGORITHM)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/api/auth/login')
 
