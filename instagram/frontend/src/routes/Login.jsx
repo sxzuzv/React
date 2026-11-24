@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, Link } from 'react-router';
 
 import { useAuth } from '../hooks/useAuth.jsx';
 
@@ -34,6 +34,7 @@ function Login() {
                 <button className="btn btn-primary">로그인</button>
                 </form>
             </div>
+            <p className="mt-3"><Link to="/signup">회원가입</Link></p>
         </>
     );
 }
