@@ -30,9 +30,12 @@ SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = 'HS256'
 
 def create_access_token(user_id: int):
-  exp = datetime.now(timezone.utc) + timedelta(minutes=30)
+  exp = datetime.now(timezone.utc) + timedelta(minutes=60)
   return jwt.encode({'sub': str(user_id), 'exp': exp}, SECRET_KEY, algorithm=ALGORITHM)
 
+def create_refresh_token(user_id: int):
+  exp = datetime.now(timezone.utc) + timedelta(days=14)
+  return jwt.encode({'sub': str(user_id), 'exp': exp, 'type': 'refresh'}, SECRET_KEY, algorithm=ALGORITHM)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/api/auth/login')
 
@@ -42,6 +45,9 @@ def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: SessionD
   except jwt.InvalidTokenError:
     raise HTTPException(status_code=401, detail='토큰이 올바르지 않습니다.', headers={'WWW-Authenticate': 'Bearer'})
 
+  if payload.get('type') == 'refresh':
+    raise HTTPException(status_code=401, detail='토큰이 올바르지 않습니다.', headers={'WWW-Authenticate': 'Bearer'})
+  
   user = db.get(User, int(payload['sub']))
 
   if user is None:

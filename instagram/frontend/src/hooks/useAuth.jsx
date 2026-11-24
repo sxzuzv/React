@@ -25,7 +25,8 @@ export function AuthProvider({ children }) {
     async function login(username, password) {
         const data = await api('/api/auth/login', {
             method: 'POST',
-            body: new URLSearchParams({ username, password })
+            body: new URLSearchParams({ username, password }),
+            credentials: 'include'
         });
 
         setToken(data.access_token);
