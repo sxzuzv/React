@@ -56,3 +56,10 @@ class Like(Base):
   # User(N) : Post(M)
   user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), primary_key=True)
   post_id: Mapped[int] = mapped_column(ForeignKey('posts.id'), primary_key=True)
+
+
+class RefreshToken(Base):
+  __tablename__ = 'refresh_tokens'
+
+  id: Mapped[str] = mapped_column(primary_key=True)
+  user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))

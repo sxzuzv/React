@@ -17,7 +17,7 @@ for i in range(1, 7):
 
 with Session(engine) as db:
   # 테이블을 비우고 번호(id)도 1부터 다시
-  db.execute(text('TRUNCATE likes, comments, posts, users RESTART IDENTITY'))
+  db.execute(text('TRUNCATE likes, comments, posts, users, refresh_tokens RESTART IDENTITY'))
 
   alice = User(username='alice', password_hash=password_hash.hash('pw1234'))
   bob = User(username='bob', password_hash=password_hash.hash('pw1234'))
