@@ -9,5 +9,7 @@ export async function api(path, options) {
         throw new Error(data.detail);
     }
 
+    if (res.status === 204) return null;
+
     return await res.json();
 }

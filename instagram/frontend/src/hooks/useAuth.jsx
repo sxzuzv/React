@@ -50,7 +50,8 @@ export function AuthProvider({ children }) {
         setToken(data.access_token);
     }
 
-    function logout() {
+    async function logout() {
+        await api('/api/auth/logtout', { method: 'POST', credentials: 'include' });
         setToken(null);
         setUser(null);
     }
