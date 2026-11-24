@@ -6,8 +6,9 @@ import { api } from '../api.js';
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-    const [ token, setToken ] = useState(localStorage.getItem('access_token'));
+    const [ token, setToken ] = useState(null);
     const [ user, setUser ] = useState(null);
+    const [ ready, setReady ] = useState(false);
 
     useEffect(() => {
         if (!token) return;
@@ -22,6 +23,23 @@ export function AuthProvider({ children }) {
         load();
     }, [token]);
 
+    useEffect(() => { 
+        async function load() {
+            try {
+                const data = await api(
+                    '/api/auth/refresh',
+                    { method: 'POST', credentials:' include'}
+                );
+
+                setToken(data.access_token);
+            } catch (e) {
+                setToken(null);
+            }
+            setReady(true);
+        }
+        load();
+    }, []);
+
     async function login(username, password) {
         const data = await api('/api/auth/login', {
             method: 'POST',
@@ -30,17 +48,15 @@ export function AuthProvider({ children }) {
         });
 
         setToken(data.access_token);
-        localStorage.setItem('access_token', data.access_token);
     }
 
     function logout() {
         setToken(null);
         setUser(null);
-        localStorage.removeItem('access_token');
     }
 
     return (
-        <AuthContext value={{ token, user, login, logout }}>{ children }</AuthContext>
+        <AuthContext value={{ token, user, ready, login, logout }}>{ children }</AuthContext>
     )
 }
 
