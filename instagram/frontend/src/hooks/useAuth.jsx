@@ -40,6 +40,18 @@ export function AuthProvider({ children }) {
         load();
     }, []);
 
+    async function authApi(path, options) {
+        try {
+            return await api(path, { ...options, headers: { Authorization: `Bearer ${token}`} });
+        } catch (e) {
+            if (e.status != 401) throw e;
+
+            const data = await api('/api/auth/refresh', { method: 'POST', credentials: 'include' });
+            setToken(data.access_token);
+            return await api(path, { ...options, headers: { Authorization: `Bearer ${token}`} });
+        } 
+    }
+
     async function login(username, password) {
         const data = await api('/api/auth/login', {
             method: 'POST',
@@ -57,7 +69,7 @@ export function AuthProvider({ children }) {
     }
 
     return (
-        <AuthContext value={{ token, user, ready, login, logout }}>{ children }</AuthContext>
+        <AuthContext value={{ token, user, ready, login, logout, authApi }}>{ children }</AuthContext>
     )
 }
 

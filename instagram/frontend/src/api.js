@@ -5,8 +5,11 @@ export async function api(path, options) {
 
     if (!res.ok) {
         const data = await res.json();
-        // { "detail" : "해당 게시물이 없습니다." }
-        throw new Error(data.detail);
+
+        const error = new Error(data.detail);
+        error.status = res.status;
+
+        throw error;
     }
 
     if (res.status === 204) return null;

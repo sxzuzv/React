@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 
 import { api } from '../api.js';
+import { useAuth } from '../hooks/useAuth.jsx';
 import PostCard from './PostCard.jsx';
 import CommentItem from '../components/CommentItem.jsx';
 
 
 function PostDetail() {
     const { id } = useParams();
+    const { authApi } = useAuth();
     const [ post, setPost ] = useState(null);
     const [ comments, setComments ] = useState([]);
     const [ error, setError ] = useState('');
@@ -15,8 +17,8 @@ function PostDetail() {
     useEffect(() => {
         async function load() {
             try {
-                setPost(await api(`/api/posts/${id}`));
-                setComments(await api(`/api/posts/${id}/comments`));
+                setPost(await authApi(`/api/posts/${id}`));
+                setComments(await authApi(`/api/posts/${id}/comments`));
             } catch (e) {
                 setError(e.message);
             }
