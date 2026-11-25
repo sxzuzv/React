@@ -40,15 +40,15 @@ export function AuthProvider({ children }) {
         load();
     }, []);
 
-    async function authApi(path, options) {
+    async function authApi(path, options = {}) {
         try {
-            return await api(path, { ...options, headers: { Authorization: `Bearer ${token}`} });
+            return await api(path, { ...options, headers: { ...options.headers, Authorization: `Bearer ${token}`} });
         } catch (e) {
-            if (e.status != 401) throw e;
+            if (e.status !== 401) throw e;
 
             const data = await api('/api/auth/refresh', { method: 'POST', credentials: 'include' });
             setToken(data.access_token);
-            return await api(path, { ...options, headers: { Authorization: `Bearer ${token}`} });
+            return await api(path, { ...options, headers: { ...options.headers, Authorization: `Bearer ${token}`} });
         } 
     }
 

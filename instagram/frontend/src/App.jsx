@@ -6,6 +6,7 @@ import PostDetail from './routes/PostDetail.jsx';
 import Login from './routes/Login.jsx';
 import RequireLogin from './components/RequireLogin.jsx';
 import Signup from './routes/Signup.jsx';
+import NewPost from './routes/NewPost.jsx';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
               <Route path="/" element={<PostList />} />
               <Route element={<RequireLogin />}>
                 <Route path="/posts/:id" element={<PostDetail />} />
+                <Route path="/new" element={<NewPost />} />
               </Route>
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
