@@ -3,6 +3,8 @@ import { useNavigate, Link } from 'react-router';
 
 import { useAuth } from '../hooks/useAuth.jsx';
 
+import { SERVER_URL } from '../api.js'
+
 
 function Login() {
     const [ username, setUsername ] = useState('');
@@ -33,6 +35,11 @@ function Login() {
                 { error && <p className="text-danger small mb-0">{ error }</p> }
                 <button className="btn btn-primary">로그인</button>
                 </form>
+                <div className="d-grid gap-2 mt-3">
+                <a className="btn btn-outline-dark" href={`${SERVER_URL}/api/auth/google/login`}>
+                    <i className="bi bi-google"></i>구글로 로그인
+                </a>
+                </div>
             </div>
             <p className="mt-3"><Link to="/signup">회원가입</Link></p>
         </>

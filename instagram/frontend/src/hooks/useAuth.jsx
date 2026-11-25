@@ -28,7 +28,7 @@ export function AuthProvider({ children }) {
             try {
                 const data = await api(
                     '/api/auth/refresh',
-                    { method: 'POST', credentials:' include'}
+                    { method: 'POST', credentials: 'include' }
                 );
 
                 setToken(data.access_token);

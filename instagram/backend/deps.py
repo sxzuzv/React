@@ -35,7 +35,7 @@ def create_access_token(user_id: int):
 
 def create_refresh_token(user_id: int, jti: str):
   exp = datetime.now(timezone.utc) + timedelta(days=14)
-  return jwt.encode({'sub': str(user_id), 'exp': exp, 'type': 'refresh', 'jti': jti}, SECRET_KEY, algorithm=ALGORITHM)
+  return jwt.encode({'sub': str(user_id), 'exp': exp, 'token_type': 'refresh', 'jti': jti}, SECRET_KEY, algorithm=ALGORITHM)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/api/auth/login')
 
@@ -45,7 +45,7 @@ def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: SessionD
   except jwt.InvalidTokenError:
     raise HTTPException(status_code=401, detail='토큰이 올바르지 않습니다.', headers={'WWW-Authenticate': 'Bearer'})
 
-  if payload.get('type') == 'refresh':
+  if payload.get('token_type') == 'refresh':
     raise HTTPException(status_code=401, detail='토큰이 올바르지 않습니다.', headers={'WWW-Authenticate': 'Bearer'})
   
   user = db.get(User, int(payload['sub']))

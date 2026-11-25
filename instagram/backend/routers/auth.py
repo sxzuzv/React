@@ -76,7 +76,7 @@ def refresh(
 
   # 토큰이 유효하지 않은 경우
   try:
-    payload = jwt.decode(refresh_token, SECRET_KEY, algoritmns=[ALGORITHM])
+    payload = jwt.decode(refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
   except jwt.InvalidTokenError:
     raise HTTPException(status_code=401, detail='토큰이 유효하지 않습니다.')
 
@@ -95,7 +95,7 @@ def refresh(
 
 
 @router.post('/logout')
-def logout(response: Response, db: SessionDep, refresh_token: Annotated[str | None, Cookie()]):
+def logout(response: Response, db: SessionDep, refresh_token: Annotated[str | None, Cookie()] = None):
   # 데이터베이스의 토큰도 삭제
   if refresh_token:
     try:
