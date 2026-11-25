@@ -9,10 +9,12 @@ function NewPost() {
     const [ content, setContent ] = useState('');
     const [ file, setFile ] = useState(null);
     const [ error, setError ] = useState('');
+    const [ sending, setSending ] = useState(false);
     const navigate = useNavigate();
 
     async function handleSubmit(e) {
         e.preventDefault();
+        setSending(true);
 
         try {
             let image_url = null;
@@ -37,6 +39,7 @@ function NewPost() {
             navigate('/');
         } catch (e) {
             setError(e.message);
+            setSending(false);
         }
     }
 
@@ -51,7 +54,9 @@ function NewPost() {
                     </div>
                 )}
                 <textarea className="form-control" rows={3} value={ content } onChange={ e => setContent(e.target.value) } placeholder="문구 입력…" required />
-                <button className="btn btn-primary">공유하기</button>
+                <button className="btn btn-primary" disabled={ sending }>
+                    { sending ? '보내는 중 . .' : '공유하기' }
+                </button>
             </form>
             {error && <p className="text-danger mt-3 mb-0">{ error }</p>}
         </div>
