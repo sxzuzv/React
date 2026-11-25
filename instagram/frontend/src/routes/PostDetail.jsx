@@ -34,6 +34,16 @@ function PostDetail() {
         setComments(comments.filter(c => c.id !== commentId));
     }
 
+    function handleUpdate(updated) {
+        setComments(comments.map(c => {
+            if (c.id === updated.id) {
+                return updated;
+            }
+            
+            return c;
+        }));
+    }
+
     if (error) return <p className="text-danger">{ error }</p>;
     if (!post) return <p>게시글 불러오는 중 . .</p>;
 
@@ -42,7 +52,7 @@ function PostDetail() {
             <PostCard { ...post } onUpdate={ setPost } />
             <ul className="list-group">
                 { comments.map(c => 
-                    <CommentItem key={ c.id } { ...c } onDelete={ handleDelete } />
+                    <CommentItem key={ c.id } { ...c } onDelete={ handleDelete } onUpdate={ handleUpdate } />
                 )}
             </ul>
             <CommentForm postId={ id } onCreate={ handleCreate } />
