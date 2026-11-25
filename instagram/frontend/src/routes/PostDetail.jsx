@@ -29,7 +29,7 @@ function PostDetail() {
 
     return (
         <>
-            <PostCard { ...post } />
+            <PostCard { ...post } onUpdate={ setPost } />
             <ul className="list-group">
                 { comments.map(c => <CommentItem key={ c.id } { ...c } />)}
             </ul>
