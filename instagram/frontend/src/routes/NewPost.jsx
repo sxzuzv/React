@@ -45,6 +45,11 @@ function NewPost() {
             <h2 className="h5 mb-3">새 게시물</h2>
             <form className="d-grid gap-2" onSubmit={ handleSubmit }>
                 <input className="form-control" type="file" accept='image/*' onChange={ e => setFile(e.target.files[0]) } />
+                { file && (
+                    <div className="ratio ratio-1x1">
+                        <img className="object-fit-cover rounded" src={ URL.createObjectURL(file) } />
+                    </div>
+                )}
                 <textarea className="form-control" rows={3} value={ content } onChange={ e => setContent(e.target.value) } placeholder="문구 입력…" required />
                 <button className="btn btn-primary">공유하기</button>
             </form>
