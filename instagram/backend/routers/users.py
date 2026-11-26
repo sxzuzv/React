@@ -21,8 +21,8 @@ def get_user_or_404(username: str, db: SessionDep):
 UserDep = Annotated[User, Depends(get_user_or_404)]
 
 
-@router.get('/{username}')
-def profile(user: UserDep, response_mode=ProfileOut):
+@router.get('/{username}', response_model=ProfileOut)
+def profile(user: UserDep):
     return user
 
 
