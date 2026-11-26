@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react';
 
-import { api } from '../api.js';
 import PostCard from './PostCard.jsx';
+import { useAuth } from '../hooks/useAuth.jsx';
 
 
-function PostList() {
+function PostList({ path }) {
+    const { authApi } = useAuth();
     const [ posts, setPosts ] = useState([]);
 
     useEffect(() => {
         async function load() {
-            setPosts(await api('/api/posts'));
+            setPosts(await authApi(path, {}));
         }
         load();
-    }, []);
+    }, [path]);
 
     function handleUpdate(updated) {
         const newPosts = posts.map((post) => {
