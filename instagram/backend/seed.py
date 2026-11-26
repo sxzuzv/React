@@ -5,7 +5,7 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from database import engine
-from models import User, Post, Comment, Like
+from models import User, Post, Comment, Like, Follow
 from deps import password_hash
 
 
@@ -17,7 +17,7 @@ for i in range(1, 7):
 
 with Session(engine) as db:
   # 테이블을 비우고 번호(id)도 1부터 다시
-  db.execute(text('TRUNCATE likes, comments, posts, users, refresh_tokens RESTART IDENTITY'))
+  db.execute(text('TRUNCATE likes, comments, posts, users, refresh_tokens, follows RESTART IDENTITY'))
 
   alice = User(username='alice', password_hash=password_hash.hash('pw1234'))
   bob = User(username='bob', password_hash=password_hash.hash('pw1234'))
@@ -52,6 +52,10 @@ with Session(engine) as db:
     Like(user_id=carol.id, post_id=p6.id),
     Like(user_id=alice.id, post_id=p8.id),
     Like(user_id=bob.id, post_id=p8.id),
+    Follow(from_user_id=alice.id, to_user_id=bob.id),
+    Follow(from_user_id=bob.id, to_user_id=carol.id),
+    Follow(from_user_id=carol.id, to_user_id=bob.id),
+    Follow(from_user_id=alice.id, to_user_id=carol.id),
   ])
   db.commit()
 

@@ -15,6 +15,9 @@ class User(Base):
   provider: Mapped[str | None]
   provider_id: Mapped[str | None]
 
+  followings: Mapped[list['Follow']] = relationship(foreign_keys='Follow.from_user_id')
+  followers: Mapped[list['Follow']] = relationship(foreign_keys='Follow.to_user_id')
+
 
 class Post(Base):
   __tablename__ = 'posts'
@@ -66,3 +69,10 @@ class RefreshToken(Base):
 
   id: Mapped[str] = mapped_column(primary_key=True)
   user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+
+
+class Follow(Base):
+  __tablename__ = 'follows'
+
+  from_user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), primary_key=True)
+  to_user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), primary_key=True)
