@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import PostCard from './PostCard.jsx';
 import { useAuth } from '../hooks/useAuth.jsx';
@@ -8,6 +8,7 @@ function PostList({ path }) {
     const { authApi } = useAuth();
     const [ posts, setPosts ] = useState([]);
     const [ hasMore, setHasMore ] = useState(true);
+    const bottom = useRef(null);
 
     useEffect(() => {
         async function load() {
@@ -21,8 +22,21 @@ function PostList({ path }) {
     async function loadMore() {
         const next = await authApi(`${path}?skip=${posts.length}`);
         setPosts([...posts, ...next]);
-        setHasMore(next.length === 10)
+        setHasMore(next.length === 10);
     }
+
+    useEffect(() => {
+        if (posts.length === 0) return; // 첫 로드는 위의 useEffect가 담당
+        
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) loadMore();
+        });
+
+        if (bottom.current) observer.observe(bottom.current);
+
+        return () => observer.disconnect();
+
+    }, [posts]);
 
     function handleUpdate(updated) {
         const newPosts = posts.map((post) => {
@@ -47,7 +61,7 @@ function PostList({ path }) {
             </div>
             { hasMore && (
                 <div className="text-center">
-                    <button className="btn btn-outline-secondary" onClick={ loadMore }>더보기</button>
+                    <p ref={ bottom }>불러오는 중 . . .</p>
                 </div>
             )}
         </>
