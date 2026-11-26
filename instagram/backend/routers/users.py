@@ -45,7 +45,7 @@ def follow(user: UserDep, db: SessionDep, me: CurrentUserDep):
     return user
 
 
-@router.delete('/{username}/follow')
+@router.delete('/{username}/follow', response_model=ProfileOut)
 def unfollow(user: UserDep, db: SessionDep, me: CurrentUserDep):
     row = db.get(Follow, (me.id, user.id))
     if row is None:
@@ -53,3 +53,5 @@ def unfollow(user: UserDep, db: SessionDep, me: CurrentUserDep):
 
     db.delete(row)
     db.commit()
+
+    return user

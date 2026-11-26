@@ -20,7 +20,7 @@ function PostCard({ id, content, created_at, image_url, user, likes, onUpdate })
         <article className="card mb-4">
             <div className="card-header bg-white d-flex align-items-center gap-2">
                 <i className="bi bi-person-circle fs-4"></i>
-                <b>{user.username}</b>
+                { user && <Link className="text-reset text-decoration-none fw-bold" to={`/users/${user.username}`}>{ user.username }</Link> }
             </div>
             {image_url && (
                 <Link className="ratio ratio-1x1" to={ `/posts/${id}` }>
