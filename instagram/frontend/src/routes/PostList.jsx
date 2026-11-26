@@ -27,7 +27,7 @@ function PostList({ path }) {
 
     useEffect(() => {
         if (posts.length === 0) return; // 첫 로드는 위의 useEffect가 담당
-        
+
         const observer = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) loadMore();
         });
@@ -56,7 +56,11 @@ function PostList({ path }) {
 
             <div>
                 { posts.map(post => (
-                    <PostCard key={ post.id } { ...post } onUpdate={ handleUpdate } />
+                    <PostCard 
+                        key={ post.id } { ...post } 
+                        visible={ false }
+                        onUpdate={ handleUpdate }
+                    />
                 ))}
             </div>
             { hasMore && (

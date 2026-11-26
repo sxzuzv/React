@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 
 import { useAuth } from '../hooks/useAuth.jsx';
 import PostCard from './PostCard.jsx';
 import CommentItem from '../components/CommentItem.jsx';
 import CommentForm from '../components/CommentForm.jsx';
+import PostEditForm from '../components/PostEditForm.jsx';
 
 
 function PostDetail() {
@@ -12,7 +13,9 @@ function PostDetail() {
     const { authApi } = useAuth();
     const [ post, setPost ] = useState(null);
     const [ comments, setComments ] = useState([]);
+    const [ editing, setEditing ] = useState(false);
     const [ error, setError ] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function load() {
@@ -44,18 +47,28 @@ function PostDetail() {
         }));
     }
 
+    function handlePostDelete() {
+        navigate('/');
+    }
+
     if (error) return <p className="text-danger">{ error }</p>;
     if (!post) return <p>게시글 불러오는 중 . .</p>;
 
     return (
         <>
-            <PostCard { ...post } onUpdate={ setPost } />
-            <ul className="list-group">
-                { comments.map(c => 
-                    <CommentItem key={ c.id } { ...c } onDelete={ handleDelete } onUpdate={ handleUpdate } />
-                )}
-            </ul>
-            <CommentForm postId={ id } onCreate={ handleCreate } />
+            { editing ? (
+                <PostEditForm { ...post } />
+            ) : (
+                <>
+                    <PostCard { ...post } onUpdate={ setPost } onDelete={ handlePostDelete } visible={ true } />
+                    <ul className="list-group">
+                        { comments.map(c =>
+                            <CommentItem key={ c.id } { ...c } onDelete={ handleDelete } onUpdate={ handleUpdate } />
+                        )}
+                    </ul>
+                    <CommentForm postId={ id } onCreate={ handleCreate } />
+                </>
+            )}
         </>
     );
 }
