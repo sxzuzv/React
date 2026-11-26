@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from deps import SessionDep, PostDep, CurrentUserDep, MyPostDep
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 from models import Post
 from schemas import PostOut, PostCreate, PostUpdate
 
@@ -10,6 +11,7 @@ router = APIRouter(prefix='/api/posts', tags=['posts'])
 def post_list(db: SessionDep, skip: int = 0, limit: int = 10):
   posts = db.scalars(
     select(Post)
+    .options(selectinload(Post.user), selectinload(Post.likes))
     .order_by(Post.created_at.desc())
     .offset(skip)
     .limit(limit)
@@ -27,6 +29,7 @@ def feed(db: SessionDep, me: CurrentUserDep, skip: int = 0, limit: int = 10):
 
   return db.scalars(
     select(Post)
+    .options(selectinload(Post.user), selectinload(Post.likes))
     .where(Post.user_id.in_(ids))
     .order_by(Post.created_at.desc())
     .offset(skip)
